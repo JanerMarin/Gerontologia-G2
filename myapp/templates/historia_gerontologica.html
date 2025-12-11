@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historia Clínica</title>
-    <link rel="stylesheet" href="{% static 'css/historia_gerontologica.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/historia_gerontologica.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
        
@@ -15,6 +15,7 @@
 <form method="post" action="{% url 'historia_gerontologica' %}">
     {% csrf_token %}
     <div class="container">
+        <button type="button" class="back-button" onclick="history.back()">⬅️ Regresar</button>
         <h1 class="main-tittle" style="text-align: center;">Historia Clínica Gerontológica</h1>
         <div>
             <div class="section-title"> 1. ASPECTOS SOCIALES</div>
@@ -38,17 +39,9 @@
                     <td>
                         <div class="date-input-group">
                             <div>
-                                <!-- <span class="date-label">Día:</span> -->
                                 <input type="date" id="fecha_nacimiento" class="form-input" name="fecha_nacimiento">
                             </div>
-                            <!-- <div>
-                                <span class="date-label">Mes:</span>
-                                <input type="number" class="small-number-input" placeholder="MM" min="1" max="12">
-                            </div>
-                            <div>
-                                <span class="date-label">Año:</span>
-                                <input type="number" class="small-number-input" placeholder="AAAA" min="1900" max="2030">
-                            </div> -->
+                            
                         </div>
                     </td>
                     <td>Edad:</td>
@@ -58,15 +51,7 @@
                 </tr>
                 <tr>
                     <td>Lugar de nacimiento:</td>
-                    <!-- Solo input sin listado desplegable -->
-                    <!-- <td> 
-                        <input type="text" class="form-input" placeholder="Pais" name="pais_nacimiento">
-                        <input type="text" class="form-input" placeholder="Departamento" name="departamento_nacimiento">
-                        <input type="text" class="form-input" placeholder="Ciudad" name="ciudad_nacimiento">
-                    </td> -->
-
-                    <!-- Listados desplegables de pais, departamento y ciudad -->
-                        <!-- País (si quieres solo Colombia, puedes dejarlo fijo o deshabilitado) -->
+                        <!-- País -->
                         <td>
                             <div>
                                 <label for="pais_nacimiento">País:</label>
@@ -147,18 +132,7 @@
                                     
                                 </td>
                         </div>
-                        <!-- <div class="gender-radio-group">
-                            <label class="gender-option">
-                                <input type="radio" name="genero" value="F"> F
-                            </label>
-                            <label class="gender-option">
-                                <input type="radio" name="genero" value="M"> M
-                            </label>
-                        </div> -->
-                        <!-- <div class="other-gender-option">
-                            <span>Otro:</span>
-                            <input type="text" class="other-gender-input" placeholder="Especificar">
-                        </div>   -->
+                        
                     </td>
                 
                 </tr>
@@ -281,17 +255,7 @@
 
             <div class="section-title"> 3. GRADO DE ESCOLARIDAD</div>
             <table>
-                <!-- <tr>
-                    <th colspan="3">Nivel Básico</th>
-                    <th colspan="3">Nivel Técnico y Superior</th>
-                </tr>
-                <tr>
-                    <th>Habilidad</th>
-                    <th>Sí</th>
-                    <th>No</th>
-                    <th>Grado de Estudios</th>
-                    <th colspan="2">Especialidad</th>
-                </tr> -->
+                
                 <tr>
                         <td>Lee</td>
                         <td><input type="radio" name="lee" value="si"> Sí</td>
@@ -330,49 +294,7 @@
                         </td>
                     </tr>
             </table>
-            <!-- <table>
-                <tr>
-                    <th>Nivel</th>
-                    <th>Si</th>
-                    <th>No</th>
-                    <th>Nivel</th>
-                    <th>Si</th>
-                    <th>No</th>
-                </tr>
-                <tr>
-                    <td>Lee:</td>
-                    <td><input type="radio" name="lee" value="si"></td>
-                    <td><input type="radio" name="lee" value="no"></td>
-                    <td>Técnica: ¿En qué?</td>
-                    <td colspan="2"><input type="text" style="width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td>Escribe:</td>
-                    <td><input type="radio" name="escribe" value="si"></td>
-                    <td><input type="radio" name="escribe" value="no"></td>
-                    <td>Tecnología: ¿En qué?</td>
-                    <td colspan="2"><input type="text" style="width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td>Primaria:</td>
-                    <td><input type="radio" name="primaria" value="completa"> Completa</td>
-                    <td><input type="radio" name="primaria" value="incompleta"> Incompleta</td>
-                    <td>Pregrado: ¿En qué?</td>
-                    <td colspan="2"><input type="text" style="width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td>Secundaria:</td>
-                    <td><input type="radio" name="secundaria" value="completa"> Completa</td>
-                    <td><input type="radio" name="secundaria" value="incompleta"> Incompleta</td>
-                    <td>Posgrado: ¿En qué?</td>
-                    <td colspan="2"><input type="text" style="width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td>Otros estudios:</td>
-                    <td colspan="2"><input type="text" style="width: 100%;"></td>
-                </tr>
-            </table> -->
+            
             <div class="section-title"> 4. DATOS SOCIOECONÓMICOS</div>
             <table>
                 <tr>
@@ -398,8 +320,7 @@
                     <td><input type="radio" name="renta_propia" value="si"> Sí <input type="radio" name="renta_propia" value="no"> No</td>
                     <td><input type="text" style="width: 100%;"></td>
                 </tr>
-                       <!-- <td><input type="radio" name="lee" value="si"> Sí</td>
-                        <td><input type="radio" name="lee" value="no"> No</td> -->
+
                 <tr>
                     <td colspan="4">Valor promedio mensual de los ingresos: <input type="text" style="width: 100%;"></td>
                 </tr>
@@ -417,16 +338,6 @@
                 </tr>
             </table>
           <div class="section-title"> Tipo de Familia a la que Pertenece la Persona Mayor</div>
-             <!-- <p><strong>Familia nuclear:</strong> Compuesta por madre, padre e hijo(s), y viven bajo el mismo techo.</p>
-            <p><strong>Familia extensa:</strong> Conformada por una familia nuclear más otros parientes pertenecientes a distintas generaciones, con lazos consanguíneos, comparten techo y funciones.</p>
-            <p><strong>Familia ampliada:</strong> Es una familia extensa con otros miembros que no tienen lazos de consanguinidad. Comparten techo y funciones.</p>
-            <p><strong>Familia multiespecie:</strong> Una familia multiespecie es aquella que está conformada por seres humanos y animales.</p>
-            <p><strong>Familia compuesta:</strong> La madre o el padre de la familia nuclear no pertenecía originalmente.</p>
-            <p><strong>Familia mixta o reconstituida:</strong> Familia donde cada uno de los padres aporta hijos de otras relaciones y tienen los suyos propios.</p>
-            <p><strong>Familia monoparental simple:</strong> Un progenitor (madre o padre) y uno o varios hijos.</p>
-            <p><strong>Familia monoparental compuesta:</strong> Es una familia monoparental con otros miembros de la familia.</p>
-            <p><strong>Familia homoparental:</strong> Familias formadas por una pareja del mismo sexo, criando hijos/as sean biológicos o adoptivos.</p>
-            <p><strong>Otros tipos de convivencia:</strong> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p> -->
             <table>
                 <tr>
                     <th>Tipología Familiar:</th>
@@ -452,31 +363,6 @@
                             style="cursor: pointer; color: #007bff; font-size: 20px; margin-left: 8px;">
                         ℹ️
                         </span>
-
-                        <!-- Modal -->
-                            <!-- <div id="modalInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-                            background-color: rgba(0,0,0,0.6); z-index:1000;">
-
-                                <div style="background:#fff; padding:20px; border-radius:8px; width:60%; margin:100px auto; position:relative;">
-                                    <h3>Tipos de Familia</h3>
-                                    <p><b>Familia nuclear:</b> Compuesta por madre, padre e hijos, bajo el mismo techo.</p>
-                                    <p><b>Familia extensa:</b> Incluye una familia nuclear y otros parientes de distintas generaciones.</p>
-                                    <p><b>Familia ampliada:</b> Familia extensa con miembros sin lazo de consanguinidad.</p>
-                                    <p><b>Familia multiespecie:</b> Conformada por seres humanos y animales.</p>
-                                    <p><b>Familia compuesta:</b> La madre o el padre no pertenecían originalmente a la familia nuclear.</p>
-                                    <p><b>Familia mixta o reconstituida:</b> Cada padre aporta hijos de relaciones previas.</p>
-                                    <p><b>Familia monoparental simple:</b> Un solo progenitor con uno o más hijos.</p>
-                                    <p><b>Familia monoparental compuesta:</b> Monoparental con otros familiares.</p>
-                                    <p><b>Familia homoparental:</b> Pareja del mismo sexo con hijos biológicos o adoptivos.</p>
-                                    <p><b>Otros tipos de convivencia:</b> Parejas sin hijos, Estructura unipersonal, Unidad Doméstica (conventos, asilos, orfanatos)</p>
-
-
-                                    <button type="button" onclick="document.getElementById('modalInfo').style.display='none'">
-                                        Cerrar
-                                    </button>
-                                </div>
-                            </div> -->
-                        <!-- Fin Modal -->
 
                         </div>
                         <input type="text" placeholder="Especifique" style="width: 100%; margin-top: 5px;">
@@ -680,300 +566,51 @@
                 <th></th>
                 <th>SI</th>
                 <th>NO</th>
-                <th>Frecuencia</th>
+
                 <th>Diario</th>
                 <th>Semanal</th>
-                <th>Nro.</th>
+                <th>Cantidad Total</th>
             </tr>
             <tr>
                 <td>a. Alcohol</td>
                 <td><input type="radio" name="alcohol" value="Si"></td>
                 <td><input type="radio" name="alcohol" value="No"></td>
-                <td></td>
-                <td><input type="checkbox" name="alcohol_frecuencia" value="Diario"></td>
-                <td><input type="checkbox" name="alcohol_frecuencia" value="Semanal"></td>
+
+                <td><input type="radio" name="alcohol_frecuencia" value="Diario"></td>
+                <td><input type="radio" name="alcohol_frecuencia" value="Semanal"></td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
                 <td>b. Cigarrillos</td>
                 <td><input type="radio" name="cigarrillos" value="Si"></td>
                 <td><input type="radio" name="cigarrillos" value="No"></td>
-                <td></td>
-                <td><input type="checkbox" name="cigarrillos_frecuencia" value="Diario"></td>
-                <td><input type="checkbox" name="cigarrillos_frecuencia" value="Semanal"></td>
+
+                <td><input type="radio" name="cigarrillos_frecuencia" value="Diario"></td>
+                <td><input type="radio" name="cigarrillos_frecuencia" value="Semanal"></td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
                 <td>c. Café</td>
                 <td><input type="radio" name="cafe" value="Si"></td>
                 <td><input type="radio" name="cafe" value="No"></td>
-                <td></td>
-                <td><input type="checkbox" name="cafe_frecuencia" value="Diario"></td>
-                <td><input type="checkbox" name="cafe_frecuencia" value="Semanal"></td>
+
+                <td><input type="radio" name="cafe_frecuencia" value="Diario"></td>
+                <td><input type="radio" name="cafe_frecuencia" value="Semanal"></td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
             <tr>
                 <td>d. Sustancias psicoactivas</td>
                 <td><input type="radio" name="sustancias" value="Si"></td>
                 <td><input type="radio" name="sustancias" value="No"></td>
-                <td></td>
-                <td><input type="checkbox" name="sustancias_frecuencia" value="Diario"></td>
-                <td><input type="checkbox" name="sustancias_frecuencia" value="Semanal"></td>
+
+                <td><input type="radio" name="sustancias_frecuencia" value="Diario"></td>
+                <td><input type="radio" name="sustancias_frecuencia" value="Semanal"></td>
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
 
         <div class="section-title">Revisión por Sistemas</div>
-     <!--  NOTA: Cuestionario con SI y NO de los diferentes sistemas y patolñogías
-        <table>
-            <tr>
-                <th>SISTEMAS</th>
-                <th>Patologías</th>
-                <th>SI</th>
-                <th>NO</th>
-                <th>SISTEMAS</th>
-                <th>Patologías</th>
-                <th>SI</th>
-                <th>NO</th>
-            </tr>
-            <tr>
-                <td>a. Alteraciones de los órganos de los sentidos</td>
-                <td>Cataratas</td>
-                <td><input type="radio" name="cataratas" value="Si"></td>
-                <td><input type="radio" name="cataratas" value="No"></td>
-                <td>b. Sistema Cardiovascular</td>
-                <td>Infarto del miocardio</td>
-                <td><input type="radio" name="infarto_miocardio" value="Si"></td>
-                <td><input type="radio" name="infarto_miocardio" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Ceguera</td>
-                <td><input type="radio" name="ceguera" value="Si"></td>
-                <td><input type="radio" name="ceguera" value="No"></td>
-                <td></td>
-                <td>HTA</td>
-                <td><input type="radio" name="hta" value="Si"></td>
-                <td><input type="radio" name="hta" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Glaucoma</td>
-                <td><input type="radio" name="glaucoma" value="Si"></td>
-                <td><input type="radio" name="glaucoma" value="No"></td>
-                <td></td>
-                <td>Insuficiencia cardíaca</td>
-                <td><input type="radio" name="insuficiencia_cardiaca" value="Si"></td>
-                <td><input type="radio" name="insuficiencia_cardiaca" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Presbiacusia</td>
-                <td><input type="radio" name="presbiacusia" value="Si"></td>
-                <td><input type="radio" name="presbiacusia" value="No"></td>
-                <td></td>
-                <td>Arteriosclerosis</td>
-                <td><input type="radio" name="arteriosclerosis" value="Si"></td>
-                <td><input type="radio" name="arteriosclerosis" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td>c. Sistema respiratorio</td>
-                <td>EPOC</td>
-                <td><input type="radio" name="epoc" value="Si"></td>
-                <td><input type="radio" name="epoc" value="No"></td>
-                <td>d. Sistema óseo-muscular</td>
-                <td>Artritis</td>
-                <td><input type="radio" name="artritis" value="Si"></td>
-                <td><input type="radio" name="artritis" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Bronquitis</td>
-                <td><input type="radio" name="bronquitis" value="Si"></td>
-                <td><input type="radio" name="bronquitis" value="No"></td>
-                <td></td>
-                <td>Osteoporosis</td>
-                <td><input type="radio" name="osteoporosis" value="Si"></td>
-                <td><input type="radio" name="osteoporosis" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Asma</td>
-                <td><input type="radio" name="asma" value="Si"></td>
-                <td><input type="radio" name="asma" value="No"></td>
-                <td></td>
-                <td>Osteoartrosis</td>
-                <td><input type="radio" name="osteoartrosis" value="Si"></td>
-                <td><input type="radio" name="osteoartrosis" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Neumonía</td>
-                <td><input type="radio" name="neumonia" value="Si"></td>
-                <td><input type="radio" name="neumonia" value="No"></td>
-                <td></td>
-                <td>Lumbago</td>
-                <td><input type="radio" name="lumbago" value="Si"></td>
-                <td><input type="radio" name="lumbago" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td>e. Sistema urinario</td>
-                <td>Anuria</td>
-                <td><input type="radio" name="anuria" value="Si"></td>
-                <td><input type="radio" name="anuria" value="No"></td>
-                <td>f. Sistema Nervioso</td>
-                <td>Demencia senil</td>
-                <td><input type="radio" name="demencia_senil" value="Si"></td>
-                <td><input type="radio" name="demencia_senil" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Cistitis</td>
-                <td><input type="radio" name="cistitis" value="Si"></td>
-                <td><input type="radio" name="cistitis" value="No"></td>
-                <td></td>
-                <td>Alzheimer</td>
-                <td><input type="radio" name="alzheimer" value="Si"></td>
-                <td><input type="radio" name="alzheimer" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Prostatitis</td>
-                <td><input type="radio" name="prostatitis" value="Si"></td>
-                <td><input type="radio" name="prostatitis" value="No"></td>
-                <td></td>
-                <td>Parkinson</td>
-                <td><input type="radio" name="parkinson" value="Si"></td>
-                <td><input type="radio" name="parkinson" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Prolapso genital</td>
-                <td><input type="radio" name="prolapso_genital" value="Si"></td>
-                <td><input type="radio" name="prolapso_genital" value="No"></td>
-                <td></td>
-                <td>Esquizofrenia</td>
-                <td><input type="radio" name="esquizofrenia" value="Si"></td>
-                <td><input type="radio" name="esquizofrenia" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Incontinencia urinaria</td>
-                <td><input type="radio" name="incontinencia_urinaria" value="Si"></td>
-                <td><input type="radio" name="incontinencia_urinaria" value="No"></td>
-                <td></td>
-                <td>Epilepsia</td>
-                <td><input type="radio" name="epilepsia" value="Si"></td>
-                <td><input type="radio" name="epilepsia" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td>g. Sistema endocrino</td>
-                <td>Diabetes mellitus</td>
-                <td><input type="radio" name="diabetes_mellitus" value="Si"></td>
-                <td><input type="radio" name="diabetes_mellitus" value="No"></td>
-                <td>h. Sistema tegumentario</td>
-                <td>Prurito</td>
-                <td><input type="radio" name="prurito" value="Si"></td>
-                <td><input type="radio" name="prurito" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Hipertiroidismo</td>
-                <td><input type="radio" name="hipertiroidismo" value="Si"></td>
-                <td><input type="radio" name="hipertiroidismo" value="No"></td>
-                <td></td>
-                <td>Urticaria</td>
-                <td><input type="radio" name="urticaria" value="Si"></td>
-                <td><input type="radio" name="urticaria" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Hipotiroidismo</td>
-                <td><input type="radio" name="hipotiroidismo" value="Si"></td>
-                <td><input type="radio" name="hipotiroidismo" value="No"></td>
-                <td></td>
-                <td>Verrugas</td>
-                <td><input type="radio" name="verrugas" value="Si"></td>
-                <td><input type="radio" name="verrugas" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Bocio</td>
-                <td><input type="radio" name="bocio" value="Si"></td>
-                <td><input type="radio" name="bocio" value="No"></td>
-                <td></td>
-                <td>Quemaduras</td>
-                <td><input type="radio" name="quemaduras" value="Si"></td>
-                <td><input type="radio" name="quemaduras" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-                <td>Otras ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td>i. Sistema digestivo</td>
-                <td>Gastritis</td>
-                <td><input type="radio" name="gastritis" value="Si"></td>
-                <td><input type="radio" name="gastritis" value="No"></td>
-                <td>j. Tumores</td>
-                <td>Tejido mamario</td>
-                <td><input type="radio" name="tejido_mamario" value="Si"></td>
-                <td><input type="radio" name="tejido_mamario" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Diarrea</td>
-                <td><input type="radio" name="diarrea" value="Si"></td>
-                <td><input type="radio" name="diarrea" value="No"></td>
-                <td></td>
-                <td>Sistema digestivo</td>
-                <td><input type="radio" name="sistema_digestivo" value="Si"></td>
-                <td><input type="radio" name="sistema_digestivo" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Estreñimiento</td>
-                <td><input type="radio" name="estrenimiento" value="Si"></td>
-                <td><input type="radio" name="estrenimiento" value="No"></td>
-                <td></td>
-                <td>Sistema urinario</td>
-                <td><input type="radio" name="sistema_urinario" value="Si"></td>
-                <td><input type="radio" name="sistema_urinario" value="No"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Úlcera duodenal</td>
-                <td><input type="radio" name="ulcera_duodenal" value="Si"></td>
-                <td><input type="radio" name="ulcera_duodenal" value="No"></td>
-                <td></td>
-                <td>Otros ¿Cuáles?</td>
-                <td colspan="3"><input type="text" style="width: 100%;"></td>
-            </tr>
-        </table> --> 
+     <!--  NOTA: Cuestionario con SI y NO de los diferentes sistemas y patolñogías -->
         <table>
             <tr>
                 <th>Sistemas</th>
@@ -1072,49 +709,44 @@
             </tr>
             
         </table>
+
         <div class="section-title">Observaciones</div>
-        <textarea style="width: 100%; height: 150px;" placeholder="Escriba aquí sus observaciones..."></textarea>
+            <textarea style="width: 100%; height: 150px;" placeholder="Escriba aquí sus observaciones..."></textarea>
         <div class="section-title">2.4. Situación Gerontológica Actual</div>
+
         <table>
-            <tr>
-                <th>EVALUACIÓN BUCAL</th>
-                <th>OBSERVACIONES</th>
-            </tr>
-            <tr>
-                <td>Piezas completas</td>
-                <td rowspan="3"><textarea style="width: 100%; height: 100px;" placeholder="Escriba aquí sus observaciones..."></textarea></td>
-            </tr>
-            <tr>
-                <td>Piezas incompletas</td>
-            </tr>
-            <tr>
-                <td>Prótesis</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>EVALUACIÓN BUCAL</th>
+                    <th>SI</th>
+                    <th>NO</th>
+                    <th>OBSERVACIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Piezas completas</td>
+                    <td><input type="radio" name="piezas_completas" value="Si"></td>
+                    <td><input type="radio" name="piezas_completas" value="No"></td>
+                    <td rowspan="3" class="obs-cell">
+                    <textarea class="obs-textarea" placeholder="Escriba aquí sus observaciones..."></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Piezas incompletas</td>
+                    <td><input type="radio" name="piezas_incompletas" value="Si"></td>
+                    <td><input type="radio" name="piezas_incompletas" value="No"></td>
+                </tr>
+
+                <tr>
+                    <td>Prótesis</td>
+                    <td><input type="radio" name="protesis" value="Si"></td>
+                    <td><input type="radio" name="protesis" value="No"></td>
+                </tr>
+            </tbody>
         </table>
-        <div class="section-title">2.4. Situación Gerontológica Actual</div>
-        <table>
-            <tr>
-                <th colspan="2">EVALUACIÓN BUCAL</th>
-                <th>OBSERVACIONES</th>
-            </tr>
-            <tr>
-                <td>CRITERIOS</td>
-                <td>VALORACIÓN</td>
-                <td rowspan="3"><textarea style="width: 100%; height: 100px;" placeholder="Escriba aquí sus observaciones..."></textarea></td>
-            </tr>
-            <tr>
-                <td>Piezas completas</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Piezas incompletas</td>
-                <td>Preguntar a la persona mayor, si realizó control de salud bucal en el último año.</td>
-            </tr>
-            <tr>
-                <td>Prótesis</td>
-                <td></td>
-            </tr>
-        </table>
+
         <div class="section-title">2.4.1. Síndromes y Problemas Geriátricos</div>
         <table>
             <tr>
@@ -1122,32 +754,32 @@
                 <th>OBSERVACIONES</th>
             </tr>
             <tr>
-                <td>Vértigo / mareo</td>
+                <td><input type="checkbox">Vértigo / mareo</td>
                 <td rowspan="10"><textarea style="width: 100%; height: 200px;" placeholder="Escriba aquí sus observaciones..."></textarea></td>
             </tr>
             <tr>
-                <td>Delirio</td>
+                <td><input type="checkbox">Delirio</td>
             </tr>
             <tr>
-                <td>Caídas (número de caídas con fracturas en el último año)</td>
+                <td><input type="checkbox">Caídas (número de caídas con fracturas en el último año)</td>
             </tr>
             <tr>
-                <td>Síncope</td>
+                <td><input type="checkbox">Síncope</td>
             </tr>
             <tr>
-                <td>Dolor crónico</td>
+                <td><input type="checkbox">Dolor crónico</td>
             </tr>
             <tr>
-                <td>Deprivación auditiva</td>
+                <td><input type="checkbox">Deprivación auditiva</td>
             </tr>
             <tr>
-                <td>Deprivación visual</td>
+                <td><input type="checkbox">Deprivación visual</td>
             </tr>
             <tr>
-                <td>Insomnio</td>
+                <td><input type="checkbox">Insomnio</td>
             </tr>
             <tr>
-                <td>Incontinencia urinaria</td>
+                <td><input type="checkbox">Incontinencia urinaria</td>
             </tr>
             <tr>
                 <td>Otros: <input type="text" style="width: 90%;"></td>
@@ -1283,40 +915,7 @@
             </tr>
         </table>
         <div class="section-title">4. ASPECTOS PSICOGERONTOLÓGICOS</div>
-       <!-- <table>
-            <tr>
-                <th>Enfermedades mentales</th>
-                <th>Sí</th>
-                <th>No</th>
-                <th>Enfermedades mentales</th>
-                <th>Sí</th>
-                <th>No</th>
-            </tr>
-            <tr>
-                <td>Psicosis</td>
-                <td><input type="radio" name="psicosis" value="Sí"></td>
-                <td><input type="radio" name="psicosis" value="No"></td>
-                <td>Duelo patológico</td>
-                <td><input type="radio" name="duelo_patologico" value="Sí"></td>
-                <td><input type="radio" name="duelo_patologico" value="No"></td>
-            </tr>
-            <tr>
-                <td>Trastorno de ansiedad</td>
-                <td><input type="radio" name="trastorno_ansiedad" value="Sí"></td>
-                <td><input type="radio" name="trastorno_ansiedad" value="No"></td>
-                <td>Trastorno Afectivo Bipolar (TAB)</td>
-                <td><input type="radio" name="tab" value="Sí"></td>
-                <td><input type="radio" name="tab" value="No"></td>
-            </tr>
-            <tr>
-                <td>Problemas Intergeneracionales</td>
-                <td><input type="radio" name="problemas_intergeneracionales" value="Sí"></td>
-                <td><input type="radio" name="problemas_intergeneracionales" value="No"></td>
-                <td>Depresión</td>
-                <td><input type="radio" name="depresion" value="Sí"></td>
-                <td><input type="radio" name="depresion" value="No"></td>
-            </tr>
-        </table> -->
+      
         <table>
             <tr>
                 <th>Enfermedades mentales</th>
@@ -1601,56 +1200,7 @@
             </tr>
         </table>
         <div class="section-title">SEGUIMIENTO Y CONTROL</div>
-        <!-- <table>
-            <tr>
-                <th>SEGUIMIENTO Y CONTROL</th>
-                <th>Día</th>
-                <th>Mes</th>
-                <th>Año</th>
-            </tr>
-            <tr>
-                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td><textarea style="width: 100%; height: 50px;" placeholder="Escriba aquí el seguimiento y control..."></textarea></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-                <td><input type="number" style="width: 100%;"></td>
-            </tr>
-        </table>
-        <table>
-            <tr>
-                <td>Nombre del Gerontólogo:</td>
-                <td><input type="text" style="width: 100%;"></td>
-                <td>Firma del Gerontólogo:</td>
-                <td><input type="text" style="width: 100%;"></td>
-            </tr>
-            <tr>
-                <td>Registro profesional N°:</td>
-                <td><input type="text" style="width: 100%;"></td>
-            </tr>
-        </table> -->
+        
         <table>
             <tr>
                 <th>SEGUIMIENTO Y CONTROL</th>
@@ -1674,7 +1224,8 @@
                 <td><input type="text" style="width: 100%;"></td>
             </tr>
         </table>
-        <button type="submit" class="submit-button">Guardar Historia</button>
+        <button type="submit" class="submit-button">💾 Guardar Historia</button>
+        <button type="button" class="back-button" onclick="history.back()">⬅️ Regresar</button>
     </div>
   
 </form>

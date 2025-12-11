@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Gerontologia',
         'USER': 'root',
-        'PASSWORD': '123456789A',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '3306'
     }

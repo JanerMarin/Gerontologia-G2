@@ -8,3 +8,4 @@ fpdf2
 Pillow
 fpdf2
 Pillow
+cryptography
