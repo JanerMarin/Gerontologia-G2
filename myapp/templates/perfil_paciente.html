@@ -1,0 +1,199 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Paciente - Gerontología App</title>
+    <link rel="stylesheet" href="{% static 'CSS/perfil_paciente.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+
+<body style="margin: 40px; background-color: #f5f7fa; font-family: Arial, sans-serif;">
+
+    <div style="
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    ">
+        <h1 class="main-title" style="
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto;
+        ">Perfil del Paciente</h1>
+    </div>
+
+<!-- CONTENEDOR PRINCIPAL -->
+    <div class="dashboard-container" style="
+        max-width: 1300px;
+        margin: 0 auto;
+        display: flex;
+        gap: 20px;
+    ">    
+
+    <!-- =========================== -->
+    <!--   COLUMNA 1 - DATOS         -->
+    <!-- =========================== -->
+    <div class="column" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- CARD -->
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2 style="margin-bottom: 10px;">Datos Personales</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><th style="text-align:left;">Nombre:</th><td>{{ patient.first_name }} {{ patient.last_name }}</td></tr>
+                <tr><th style="text-align:left;">Documento:</th><td>{{ patient.document_number }}</td></tr>
+                <tr><th style="text-align:left;">Fecha de nacimiento:</th><td>{{ patient.birth_date }}</td></tr>
+                <tr><th style="text-align:left;">Edad:</th><td>{{ patient.age }}</td></tr>
+                <tr><th style="text-align:left;">Teléfono:</th><td>{{ patient.phone }}</td></tr>
+                <tr><th style="text-align:left;">Dirección:</th><td>{{ patient.address }}</td></tr>
+                <tr><th style="text-align:left;">Acudiente:</th><td>{{ patient.guardian_name }} ({{ patient.guardian_phone }})</td></tr>
+            </table>
+        </div>
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Información Clínica</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr><th style="text-align:left;">Diagnóstico principal:</th><td>{{ clinical.diagnosis|default:"N/A" }}</td></tr>
+                <tr><th style="text-align:left;">Médico tratante:</th><td>{{ clinical.doctor|default:"N/A" }}</td></tr>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- =========================== -->
+    <!--   COLUMNA 2 - LISTAS        -->
+    <!-- =========================== -->
+    <div class="column" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Alergias</h2>
+            {% if allergies %}
+            <ul>
+                {% for item in allergies %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No registradas</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Enfermedades Crónicas</h2>
+            {% if chronic %}
+            <ul>
+                {% for item in chronic %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No registradas</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Medicamentos Actuales</h2>
+            {% if medications %}
+            <ul>
+                {% for med in medications %}
+                    <li>{{ med }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No hay medicación activa.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- =========================== -->
+    <!--   COLUMNA 3 - HISTORIAL     -->
+    <!-- =========================== -->
+    <div class="column" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Signos Vitales Recientes</h2>
+            {% if vitals %}
+            <ul>
+                {% for v in vitals %}
+                    <li>{{ v }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No hay registros.</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Terapias</h2>
+            {% if therapies %}
+            <ul>
+                {% for t in therapies %}
+                    <li>{{ t }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No hay sesiones registradas.</p>
+            {% endif %}
+        </div>
+
+        <div class="card" style="
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        ">
+            <h2>Documentos</h2>
+            {% if documents %}
+            <ul>
+                {% for d in documents %}
+                    <li>{{ d }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No hay documentos.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+</body>

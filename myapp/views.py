@@ -68,8 +68,8 @@ def loginup(request):
             return redirect('paciente')
         
     
-def paciente(request):
-    return render(request, "paciente.html")
+def paciente_registro(request):
+    return render(request, "paciente_registro.html")
 
 def historia_gerontologica(request):
     if request.method == 'POST':
@@ -727,6 +727,62 @@ def descargar_manual_pdf(request):
             status=404
         )
     return FileResponse(open(pdf_path, 'rb'), as_attachment=True, filename='manual_usuario.pdf')
+
+
+def perfil_paciente(request, paciente_id=None):
+    if paciente_id:
+        # Si el ID existe, cargar paciente real
+        patient = get_object_or_404(Patient, id=paciente_id)
+    else:
+        # 🔹 Paciente temporal para pruebas
+        patient = {
+            "first_name": "Paciente",
+            "last_name": "Demostración",
+            "document_number": "00000000",
+            "birth_date": "1950-01-01",
+            "age": 75,
+            "phone": "0000000000",
+            "address": "Dirección de ejemplo",
+            "guardian_name": "Familiar de Ejemplo",
+            "guardian_phone": "9999999999",
+            "primary_diagnosis": "N/A",
+            "doctor": "N/A",
+        }
+        # Otros datos vacíos
+        allergies = []
+        chronic_conditions = []
+        medications = []
+        vital_signs = []
+        therapy_sessions = []
+        documents = []
+
+        return render(request, "perfil_paciente.html", {
+            "patient": patient,
+            "allergies": allergies,
+            "chronic_conditions": chronic_conditions,
+            "medications": medications,
+            "vital_signs": vital_signs,
+            "therapy_sessions": therapy_sessions,
+            "documents": documents,
+        })
+
+    # 🔹 Si llegó aquí, significa que sí había ID real
+    allergies = patient.allergies.all()
+    chronic_conditions = patient.chronic_conditions.all()
+    medications = patient.medications.all()
+    vital_signs = patient.vital_signs.order_by("-date")[:10]
+    therapy_sessions = patient.therapy_sessions.order_by("-date")
+    documents = patient.documents.all()
+
+    return render(request, "perfil_paciente.html", {
+        "patient": patient,
+        "allergies": allergies,
+        "chronic_conditions": chronic_conditions,
+        "medications": medications,
+        "vital_signs": vital_signs,
+        "therapy_sessions": therapy_sessions,
+        "documents": documents,
+    })
 
 
 # ------------------

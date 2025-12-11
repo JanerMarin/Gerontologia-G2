@@ -20,15 +20,15 @@ from myapp import views
 
 #Aca se encuntran los enlaces que se importaron a partir de la clase myapp para que se pueda acceder a las rutas descritas en esa plantilla
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('admin/', admin.site.urls),
     path('administrador/', views.administrador, name='administrador'),
     path('atencion/', views.atencion, name='atencion'),
     path('contactenos/', views.contactenos, name='contactenos'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('especialidades/', views.especialidades, name='especialidades'),
     path('login/', views.loginup, name='login'),
-    path('paciente/', views.paciente, name='paciente'),
+    path('paciente_registro/', views.paciente_registro, name='paciente_registro'),
     path('historia_gerontologica/', views.historia_gerontologica, name='historia_gerontologica'),
     path('login/registro/', views.registro, name='registro'),
     path('servicios/', views.servicios, name='servicios'),
@@ -38,7 +38,9 @@ urlpatterns = [
     path('manual.pdf', views.descargar_manual_pdf, name='manual_pdf'),
     path('enfermeria/', views.enfermeria, name='enfermeria'),
     path('enfermeria/evolucion/', views.evolucion_enfermeria, name='evolucion_enfermeria'),
-    
+    # path('perfil_paciente/', views.perfil_paciente, name='perfil_paciente'),
+    path('paciente/', views.perfil_paciente, name='perfil_paciente_demo'),
+    path("paciente/<int:paciente_id>/", views.perfil_paciente, name="perfil_paciente"),
     
     
     
