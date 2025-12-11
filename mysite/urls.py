@@ -41,9 +41,19 @@ urlpatterns = [
     # path('perfil_paciente/', views.perfil_paciente, name='perfil_paciente'),
     path('paciente/', views.perfil_paciente, name='perfil_paciente_demo'),
     path("paciente/<int:paciente_id>/", views.perfil_paciente, name="perfil_paciente"),
+    path('medico/', views.medico, name='medico'),
+    path('medico/consulta-nueva/', views.medico_consulta_nueva, name='medico_consulta_nueva'),  
+     path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),  
+]
+
+   
+
+
+
+    
     
     
     
   
     
-    ]
+    
