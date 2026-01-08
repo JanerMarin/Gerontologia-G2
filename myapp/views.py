@@ -25,6 +25,8 @@ from .models import Identificacion, ConsultaMedica
 def home(request):
     return render(request, "index.html")
 
+@login_required(login_url='login')
+@user_passes_test(lambda u: u.is_superuser, login_url='login')
 def administrador(request):
     return render(request, "administrador.html")
 
@@ -58,19 +60,22 @@ def loginup(request):
             })
         else:
             login(request, user)
-            # Redirigir según el grupo del usuario
+            # Redirigir según el perfil del usuario
             if user.is_active:
-                # Verificar si pertenece al grupo Enfermeria
-                if user.groups.filter(name='Enfermeria').exists():
-                    return redirect('enfermeria')
                 # Si es superusuario, al panel de administración
-                elif user.is_superuser:
-                    return redirect('admin_users')
-                # Si es staff, a paciente
+                if user.is_superuser:
+                    return redirect('administrador')
+                # Verificar si pertenece al grupo Enfermeria
+                elif user.groups.filter(name='Enfermeria').exists():
+                    return redirect('enfermeria')
+                # Verificar si pertenece al grupo Medico
+                elif user.groups.filter(name='Medico').exists():
+                    return redirect('medico')
+                # Si es staff, redirigir según su rol
                 elif user.is_staff:
-                    return redirect('paciente')
-            # Por defecto, a paciente
-            return redirect('paciente')
+                    return redirect('administrador')
+            # Por defecto, al registro de paciente
+            return redirect('paciente_registro')
         
     
 def paciente_registro(request):
@@ -640,21 +645,52 @@ def cerrarSesion(request):
 @login_required
 def enfermeria(request):
     """Vista del módulo de enfermería - Dashboard con funcionalidades específicas"""
+    from datetime import date
+    from django.db.models import Count, Q
+    from .models import EvolucionDiariaEnfermeria
+    
     # Verificar si el usuario pertenece al grupo Enfermeria
     if not request.user.groups.filter(name='Enfermeria').exists():
         messages.error(request, 'No tiene permisos para acceder a este módulo.')
         return redirect('home')
     
-    # Obtener lista de pacientes (aquí puedes agregar filtros según tus necesidades)
-    pacientes = Identificacion.objects.all()[:10]  # Limitar a 10 pacientes para el ejemplo
+    # Obtener fecha de hoy
+    hoy = date.today()
     
-    # Estadísticas de ejemplo (puedes calcularlas dinámicamente)
+    # Obtener evoluciones del día de hoy
+    evoluciones_hoy = EvolucionDiariaEnfermeria.objects.filter(fecha=hoy)
+    
+    # Calcular estadísticas reales del día
+    pacientes_atendidos = evoluciones_hoy.values('paciente').distinct().count()
+    
+    # Contar registros con signos vitales completos (al menos uno registrado)
+    signos_vitales_tomados = evoluciones_hoy.filter(
+        Q(frecuencia_cardiaca__isnull=False, frecuencia_cardiaca__gt='') |
+        Q(presion_arterial__isnull=False, presion_arterial__gt='') |
+        Q(temperatura__isnull=False, temperatura__gt='') |
+        Q(frecuencia_respiratoria__isnull=False, frecuencia_respiratoria__gt='')
+    ).count()
+    
+    # Contar pacientes que recibieron medicamentos hoy
+    medicamentos_administrados = evoluciones_hoy.filter(medicamentos='1').count()
+    
+    # Contar novedades del día
+    novedades_hoy = evoluciones_hoy.filter(novedad='1').count()
+    
+    # Obtener lista de pacientes recientes
+    pacientes = Identificacion.objects.all()[:10]
+    
+    # Obtener últimas evoluciones del día para mostrar
+    ultimas_evoluciones = evoluciones_hoy.select_related('paciente').order_by('-fecha_registro')[:5]
+    
     context = {
         'pacientes': pacientes,
-        'pacientes_atendidos': pacientes.count(),
-        'consultas_pendientes': 5,  # Ejemplo estático, calcula según tu lógica
-        'signos_vitales': 12,  # Ejemplo estático
-        'medicamentos_admin': 8,  # Ejemplo estático
+        'pacientes_atendidos': pacientes_atendidos,
+        'consultas_pendientes': novedades_hoy,  # Usar novedades como "consultas pendientes"
+        'signos_vitales': signos_vitales_tomados,
+        'medicamentos_admin': medicamentos_administrados,
+        'ultimas_evoluciones': ultimas_evoluciones,
+        'fecha_hoy': hoy,
     }
     
     return render(request, 'enfermeria.html', context)

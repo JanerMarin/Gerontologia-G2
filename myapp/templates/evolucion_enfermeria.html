@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evolución Diaria de Enfermería - Personas Mayores</title>
-    <link rel="stylesheet" href="{% static 'CSS/historia_gerontologica.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/evolucion_enfermeria.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header con información del usuario -->
-        <div class="header-section">
+        <header>
             <div class="user-info-bar">
                 <div class="user-welcome">
                     <i class="fas fa-user-nurse"></i>
@@ -27,15 +25,15 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-        <h1 class="main-title">EVOLUCIÓN DIARIA DE ENFERMERÍA PERSONAS MAYORES</h1>
+            <h1><i class="fas fa-notes-medical"></i> Sistema de Registro</h1>
+            <h2>Evolución Diaria de Enfermería - Personas Mayores</h2>
+        </header>
 
         <form method="post" action="{% url 'evolucion_enfermeria' %}">
             {% csrf_token %}
 
             <!-- Información del Paciente -->
-            <div class="section-title">INFORMACIÓN DEL PACIENTE</div>
+            <h3 class="section-title"><i class="fas fa-user"></i> Información del Paciente</h3>
             <table class="identification-table">
                 <tr>
                     <td style="width: 20%;">Nombre:</td>
@@ -63,30 +61,31 @@
             </table>
 
             <!-- Tabla de Evolución Diaria -->
-            <div class="section-title">REGISTRO DIARIO</div>
+            <h3 class="section-title"><i class="fas fa-calendar-check"></i> Registro Diario</h3>
             
+            <!-- Vista de tabla para pantallas grandes -->
             <div class="evolution-table-container">
                 <table class="evolution-table">
                     <thead>
                         <tr>
-                            <th rowspan="2">Fecha<br>D-M-A</th>
-                            <th rowspan="2">Pasó el Día<br>B-R-M</th>
-                            <th rowspan="2">Alimentación<br>B-R-M</th>
-                            <th rowspan="2">Elimina<br>B-R-M</th>
-                            <th rowspan="2">Exonera<br>B-R-M</th>
-                            <th rowspan="2">Medicamentos<br>SI-NO</th>
-                            <th colspan="4">Signos Vitales</th>
-                            <th rowspan="2">Novedad<br>SI-NO</th>
-                            <th rowspan="2">Observación</th>
-                            <th rowspan="2">Nombre de quien<br>atiende a la<br>persona mayor</th>
-                            <th rowspan="2">Identificación</th>
-                            <th rowspan="2">Firma</th>
+                            <th rowspan="2"><i class="fas fa-calendar-alt"></i><br>Fecha<br><small>D-M-A</small></th>
+                            <th rowspan="2"><i class="fas fa-smile"></i><br>Pasó el Día<br><small>B-R-M</small></th>
+                            <th rowspan="2"><i class="fas fa-utensils"></i><br>Alimentación<br><small>B-R-M</small></th>
+                            <th rowspan="2"><i class="fas fa-tint"></i><br>Elimina<br><small>B-R-M</small></th>
+                            <th rowspan="2"><i class="fas fa-toilet"></i><br>Exonera<br><small>B-R-M</small></th>
+                            <th rowspan="2"><i class="fas fa-pills"></i><br>Medicamentos<br><small>SÍ-NO</small></th>
+                            <th colspan="4"><i class="fas fa-heartbeat"></i> Signos Vitales</th>
+                            <th rowspan="2"><i class="fas fa-exclamation-triangle"></i><br>Novedad<br><small>SÍ-NO</small></th>
+                            <th rowspan="2"><i class="fas fa-comment-medical"></i><br>Observación</th>
+                            <th rowspan="2"><i class="fas fa-user-nurse"></i><br>Nombre del<br>Profesional</th>
+                            <th rowspan="2"><i class="fas fa-id-card"></i><br>Identificación</th>
+                            <th rowspan="2"><i class="fas fa-signature"></i><br>Firma</th>
                         </tr>
                         <tr>
-                            <th>F.C.</th>
-                            <th>P.A.</th>
-                            <th>T</th>
-                            <th>F.R.</th>
+                            <th><i class="fas fa-heart"></i> F.C.</th>
+                            <th><i class="fas fa-heartbeat"></i> P.A.</th>
+                            <th><i class="fas fa-thermometer-half"></i> T°</th>
+                            <th><i class="fas fa-lungs"></i> F.R.</th>
                         </tr>
                     </thead>
                     <tbody id="evolution-tbody">
@@ -164,12 +163,130 @@
                 </table>
             </div>
 
+            <!-- Vista de cards para pantallas pequeñas -->
+            <div class="evolution-card" id="evolution-card">
+                <div class="evolution-card-header">
+                    <i class="fas fa-notes-medical"></i> Registro de Evolución
+                </div>
+                
+                <div class="card-field">
+                    <label><i class="fas fa-calendar"></i> Fecha</label>
+                    <input type="date" name="fecha_mobile" class="form-input-small" required value="{{ today }}">
+                </div>
+
+                <div class="card-field-group">
+                    <h4><i class="fas fa-clipboard-check"></i> Estado del Día</h4>
+                    
+                    <div class="card-field">
+                        <label>¿Cómo pasó el día? (B-R-M)</label>
+                        <select name="paso_el_dia_mobile" class="form-select-small" required>
+                            <option value="B">Bueno</option>
+                            <option value="R">Regular</option>
+                            <option value="M">Malo</option>
+                        </select>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Alimentación (B-R-M)</label>
+                        <select name="alimentacion_mobile" class="form-select-small" required>
+                            <option value="B">Bueno</option>
+                            <option value="R">Regular</option>
+                            <option value="M">Malo</option>
+                        </select>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Elimina (B-R-M)</label>
+                        <select name="elimina_mobile" class="form-select-small" required>
+                            <option value="B">Bueno</option>
+                            <option value="R">Regular</option>
+                            <option value="M">Malo</option>
+                        </select>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Exonera (B-R-M)</label>
+                        <select name="exonera_mobile" class="form-select-small" required>
+                            <option value="B">Bueno</option>
+                            <option value="R">Regular</option>
+                            <option value="M">Malo</option>
+                        </select>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Medicamentos</label>
+                        <select name="medicamentos_mobile" class="form-select-small" required>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card-field-group">
+                    <h4><i class="fas fa-heartbeat"></i> Signos Vitales</h4>
+                    <div class="signos-vitales-grid">
+                        <div class="card-field">
+                            <label>F.C. (Frecuencia Cardíaca)</label>
+                            <input type="text" name="frecuencia_cardiaca_mobile" class="form-input-small" placeholder="FC">
+                        </div>
+
+                        <div class="card-field">
+                            <label>P.A. (Presión Arterial)</label>
+                            <input type="text" name="presion_arterial_mobile" class="form-input-small" placeholder="PA">
+                        </div>
+
+                        <div class="card-field">
+                            <label>T° (Temperatura)</label>
+                            <input type="text" name="temperatura_mobile" class="form-input-small" placeholder="T°">
+                        </div>
+
+                        <div class="card-field">
+                            <label>F.R. (Frecuencia Respiratoria)</label>
+                            <input type="text" name="frecuencia_respiratoria_mobile" class="form-input-small" placeholder="FR">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-field">
+                    <label><i class="fas fa-exclamation-triangle"></i> Novedad</label>
+                    <select name="novedad_mobile" class="form-select-small" required>
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="card-field">
+                    <label><i class="fas fa-comment-medical"></i> Observaciones</label>
+                    <textarea name="observacion_mobile" class="form-textarea-small" rows="3" placeholder="Observaciones"></textarea>
+                </div>
+
+                <div class="card-field-group">
+                    <h4><i class="fas fa-user-nurse"></i> Datos del Profesional</h4>
+                    
+                    <div class="card-field">
+                        <label>Nombre Completo</label>
+                        <input type="text" name="nombre_profesional_mobile" class="form-input-small" 
+                               value="{{ user.first_name }} {{ user.last_name }}" required>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Identificación</label>
+                        <input type="text" name="identificacion_profesional_mobile" class="form-input-small" required>
+                    </div>
+
+                    <div class="card-field">
+                        <label>Firma</label>
+                        <input type="text" name="firma_mobile" class="form-input-small" placeholder="Firma">
+                    </div>
+                </div>
+            </div>
+
             <!-- Botones de acción -->
             <div class="form-actions">
                 <button type="submit" class="btn-primary">
                     <i class="fas fa-save"></i> Guardar Registro
                 </button>
-                <button type="button" class="btn-add-row" onclick="addRow()">
+                <button type="button" class="btn-add-row" onclick="addRow()" style="display: none;">
                     <i class="fas fa-plus"></i> Agregar Fila
                 </button>
                 <a href="{% url 'enfermeria' %}" class="btn-cancel">
@@ -178,62 +295,99 @@
             </div>
         </form>
 
-        <!-- Historial de Evoluciones -->
+        <!-- Historial de Evoluciones - Tabla Completa de Registros Diarios -->
         {% if evoluciones %}
-        <div class="section-title">HISTORIAL DE EVOLUCIONES</div>
+        <h3 class="section-title"><i class="fas fa-history"></i> Historial de Registros Diarios por Paciente</h3>
         <div class="table-responsive">
-            <table class="patients-table">
+            <table class="history-table">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Paciente</th>
-                        <th>Estado del Día</th>
-                        <th>Signos Vitales</th>
-                        <th>Novedad</th>
-                        <th>Profesional</th>
-                        <th>Acciones</th>
+                        <th><i class="fas fa-calendar"></i> Fecha</th>
+                        <th><i class="fas fa-user"></i> Paciente</th>
+                        <th><i class="fas fa-smile"></i> Día</th>
+                        <th><i class="fas fa-utensils"></i> Alim.</th>
+                        <th><i class="fas fa-tint"></i> Elim.</th>
+                        <th><i class="fas fa-toilet"></i> Exon.</th>
+                        <th><i class="fas fa-pills"></i> Med.</th>
+                        <th><i class="fas fa-heartbeat"></i> Signos Vitales</th>
+                        <th><i class="fas fa-exclamation-triangle"></i> Nov.</th>
+                        <th><i class="fas fa-comment"></i> Observación</th>
+                        <th><i class="fas fa-user-nurse"></i> Profesional</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for evolucion in evoluciones %}
                     <tr>
-                        <td>{{ evolucion.fecha|date:"d/m/Y" }}</td>
+                        <td><strong>{{ evolucion.fecha|date:"d/m/Y" }}</strong></td>
                         <td>{{ evolucion.paciente.primer_nombre }} {{ evolucion.paciente.primer_apellido }}</td>
                         <td>
                             <span class="badge badge-{{ evolucion.paso_el_dia|lower }}">
-                                {% if evolucion.paso_el_dia == 'B' %}Bueno
-                                {% elif evolucion.paso_el_dia == 'R' %}Regular
-                                {% else %}Malo{% endif %}
+                                {{ evolucion.paso_el_dia }}
                             </span>
                         </td>
                         <td>
-                            FC: {{ evolucion.frecuencia_cardiaca|default:"--" }}<br>
-                            PA: {{ evolucion.presion_arterial|default:"--" }}
+                            <span class="badge badge-{{ evolucion.alimentacion|lower }}">
+                                {{ evolucion.alimentacion }}
+                            </span>
                         </td>
                         <td>
-                            {% if evolucion.novedad == '1' %}
-                            <span class="badge badge-warning">Sí</span>
+                            <span class="badge badge-{{ evolucion.elimina|lower }}">
+                                {{ evolucion.elimina }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ evolucion.exonera|lower }}">
+                                {{ evolucion.exonera }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            {% if evolucion.medicamentos == '1' %}
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
                             {% else %}
-                            <span class="badge badge-success">No</span>
+                            <i class="fas fa-times-circle" style="color: #dc2626;"></i>
                             {% endif %}
                         </td>
-                        <td>{{ evolucion.nombre_profesional }}</td>
                         <td>
-                            <button class="btn-action btn-view" title="Ver Detalles" onclick="verDetalle({{ evolucion.id }})">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                            <div class="vital-signs">
+                                <small>
+                                    <strong>FC:</strong> {{ evolucion.frecuencia_cardiaca|default:"--" }} |
+                                    <strong>PA:</strong> {{ evolucion.presion_arterial|default:"--" }}<br>
+                                    <strong>T°:</strong> {{ evolucion.temperatura|default:"--" }} |
+                                    <strong>FR:</strong> {{ evolucion.frecuencia_respiratoria|default:"--" }}
+                                </small>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            {% if evolucion.novedad == '1' %}
+                            <span class="badge badge-warning">SÍ</span>
+                            {% else %}
+                            <span class="badge badge-success">NO</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small>{{ evolucion.observacion|default:"Sin observaciones"|truncatewords:10 }}</small>
+                        </td>
+                        <td>
+                            <small>
+                                {{ evolucion.nombre_profesional }}<br>
+                                <em>ID: {{ evolucion.identificacion_profesional }}</em>
+                            </small>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="no-records">
+            <i class="fas fa-info-circle"></i>
+            <p>No hay registros de evolución diaria aún. Completa el formulario para crear el primer registro.</p>
+        </div>
         {% endif %}
 
         <!-- Footer -->
-        <footer class="footer-section">
-            <p>&copy; 2025 Gerontología App - Módulo de Enfermería</p>
-            <p>Evolución Diaria de Personas Mayores</p>
+        <footer>
+            <p>© 2025 Sistema de Historias Clínicas Gerontológicas</p>
         </footer>
     </div>
 

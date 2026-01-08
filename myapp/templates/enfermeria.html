@@ -30,7 +30,7 @@
 
         <h1 class="main-title">MÓDULO DE ENFERMERÍA</h1>
         <!-- Resumen de estadísticas -->
-        <div class="section-title">RESUMEN DEL DÍA</div>
+        <div class="section-title">RESUMEN DEL DÍA - {{ fecha_hoy|date:"d/m/Y" }}</div>
         <section class="stats-section">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -44,10 +44,10 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon pendientes">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-exclamation-circle"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>Consultas Pendientes</h3>
+                        <h3>Novedades del Día</h3>
                         <p class="stat-number">{{ consultas_pendientes|default:"0" }}</p>
                     </div>
                 </div>
@@ -71,6 +71,59 @@
                 </div>
             </div>
         </section>
+
+        <!-- Últimas Evoluciones del Día -->
+        {% if ultimas_evoluciones %}
+        <div class="section-title">ÚLTIMOS REGISTROS DEL DÍA</div>
+        <section class="recent-evolutions">
+            <div class="table-responsive">
+                <table class="evolution-summary-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-clock"></i> Hora</th>
+                            <th><i class="fas fa-user"></i> Paciente</th>
+                            <th><i class="fas fa-smile"></i> Estado</th>
+                            <th><i class="fas fa-heartbeat"></i> Signos Vitales</th>
+                            <th><i class="fas fa-exclamation-triangle"></i> Novedad</th>
+                            <th><i class="fas fa-user-nurse"></i> Profesional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evolucion in ultimas_evoluciones %}
+                        <tr>
+                            <td><strong>{{ evolucion.fecha_registro|date:"H:i" }}</strong></td>
+                            <td>{{ evolucion.paciente.primer_nombre }} {{ evolucion.paciente.primer_apellido }}</td>
+                            <td>
+                                <span class="badge badge-{{ evolucion.paso_el_dia|lower }}">
+                                    {{ evolucion.paso_el_dia }}
+                                </span>
+                            </td>
+                            <td>
+                                <small>
+                                    FC: {{ evolucion.frecuencia_cardiaca|default:"--" }} | 
+                                    PA: {{ evolucion.presion_arterial|default:"--" }}
+                                </small>
+                            </td>
+                            <td class="text-center">
+                                {% if evolucion.novedad == '1' %}
+                                <span class="badge badge-warning"><i class="fas fa-exclamation-circle"></i> SÍ</span>
+                                {% else %}
+                                <span class="badge badge-success"><i class="fas fa-check-circle"></i> NO</span>
+                                {% endif %}
+                            </td>
+                            <td><small>{{ evolucion.nombre_profesional }}</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="view-all-link">
+                <a href="{% url 'evolucion_enfermeria' %}" class="btn-view-all">
+                    <i class="fas fa-list"></i> Ver Todos los Registros
+                </a>
+            </div>
+        </section>
+        {% endif %}
 
         <!-- Menú de acciones rápidas -->
         <div class="section-title">ACCIONES RÁPIDAS</div>

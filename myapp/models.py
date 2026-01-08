@@ -218,7 +218,7 @@ class GradoEscolaridad(models.Model):
     
     #Educacion tecnica y superior
     tecnico = models.CharField(max_length=255, blank=True)
-    tenologo = models.CharField(max_length=255, blank=True) #Corregir ortografia, verificar vista tambien
+    tecnologo = models.CharField(max_length=255, blank=True, db_column='tecnologo')  # Columna en DB es 'tecnologo'
     profesional = models.CharField(max_length=255, blank=True)
     maestria = models.CharField(max_length=255, blank=True)
     otros_estudios = models.CharField(max_length=500, blank=True)
@@ -234,7 +234,7 @@ class DatosSocioEconomicosForm(models.Model):
     
     # Actividad laboral desempenada
     
-    actividad_desempenada = models.CharField(max_length=255) #quitar la n
+    actividad_desempenada = models.CharField(max_length=255, db_column='actividad_desempeñada')  # Columna en DB con ñ
     ocupacion_actual = models.CharField(max_length=255)
     
     # Origen de los ingresos actuales

@@ -42,8 +42,8 @@ body {
     text-align: center;
     font-weight: bold;
     font-size: 2rem;
-    color: #1e3a8a;
-    border-bottom: 3px solid #1e3a8a;
+    color: #1962bc;
+    border-bottom: 3px solid #1962bc;
     margin: 20px auto 35px;
     padding-bottom: 12px;
     width: 90%;
@@ -57,7 +57,7 @@ body {
     font-size: 1.3rem;
     background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
     padding: 14px 20px;
-    border-left: 6px solid #1e3a8a;
+    border-left: 6px solid #1962bc;
     margin: 35px 0 18px;
     border-radius: 8px;
     text-align: center;
@@ -70,7 +70,7 @@ body {
 }
 
 .user-info-bar {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
     color: white;
     padding: 15px 25px;
     border-radius: 10px;
@@ -157,8 +157,8 @@ body {
 
 .stat-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(30, 58, 138, 0.15);
-    border-color: #1e3a8a;
+    box-shadow: 0 6px 16px rgba(25, 98, 188, 0.15);
+    border-color: #1962bc;
 }
 
 .stat-icon {
@@ -174,7 +174,7 @@ body {
 }
 
 .stat-icon.pacientes {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
 }
 
 .stat-icon.pendientes {
@@ -199,7 +199,7 @@ body {
 .stat-number {
     font-size: 2rem;
     font-weight: bold;
-    color: #1e3a8a;
+    color: #1962bc;
 }
 
 /* Sección de Acciones */
@@ -230,14 +230,14 @@ body {
 
 .action-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(30, 58, 138, 0.15);
-    border-color: #1e3a8a;
+    box-shadow: 0 6px 16px rgba(25, 98, 188, 0.15);
+    border-color: #1962bc;
 }
 
 .action-icon {
     width: 70px;
     height: 70px;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -249,7 +249,7 @@ body {
 }
 
 .action-card h3 {
-    color: #1e3a8a;
+    color: #1962bc;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
     font-weight: bold;
@@ -279,7 +279,7 @@ body {
 }
 
 .patients-table thead {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
     color: white;
 }
 
@@ -347,8 +347,8 @@ body {
 }
 
 .btn-view {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
-    border-color: #1e293b;
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    border-color: #0f3a7a;
 }
 
 .btn-edit {
@@ -430,6 +430,74 @@ body {
     font-size: 0.9rem;
 }
 
+/* Sección de Últimas Evoluciones */
+.recent-evolutions {
+    margin-bottom: 30px;
+}
+
+.evolution-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.evolution-summary-table thead {
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+}
+
+.evolution-summary-table th {
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.evolution-summary-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.evolution-summary-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.evolution-summary-table .text-center {
+    text-align: center;
+}
+
+.view-all-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.btn-view-all {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #1962bc 0%, #144a91 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-view-all:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 98, 188, 0.3);
+    background: linear-gradient(135deg, #144a91 0%, #0f3a7a 100%);
+}
+
+.btn-view-all i {
+    margin-right: 8px;
+}
+
 /* Footer */
 .footer-section {
     background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
@@ -438,7 +506,7 @@ body {
     text-align: center;
     margin-top: 2rem;
     border-radius: 8px;
-    border-top: 3px solid #1e3a8a;
+    border-top: 3px solid #1962bc;
 }
 
 .footer-section p {
