@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-<form method="post" action="{% url 'historia_gerontologica' %}">
+<form id="historia_gerontologica_form" method="post" action="{% url 'historia_gerontologica' %}" data-cache="true" data-cache-interval="2000">
     {% csrf_token %}
     <div class="container">
         <button type="button" class="back-button" onclick="history.back()">⬅️ Regresar</button>
@@ -1253,5 +1253,9 @@
     </div>
 </div>
 <!-- Fin Modal -->
+
+<!-- Script de cache automático para formularios -->
+<script src="{% static 'js/form_cache.js' %}"></script>
+
 </body>
 </html>

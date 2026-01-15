@@ -227,11 +227,78 @@ Si deseas, puedo insertar automáticamente solo después de que existan para evi
 **12. Extensión opcional (Selenium)**
 Puedes añadir un script Selenium si tu flujo requiere interacción más compleja (llenado masivo de formularios). Solicítalo si lo necesitas.
 
-**13. Cierre**
+**13. Sistema de Cache para Formularios**
+
+Para evitar pérdida de datos en formularios largos, se ha implementado un sistema de cache automático que guarda los datos en el navegador mientras el usuario los diligencie.
+
+**Instalación automática:**
+- El script `form_cache.js` se carga en las páginas con formularios.
+- Agrega el atributo `data-cache="true"` a cualquier formulario:
+
+```html
+<form id="mi_formulario" method="post" data-cache="true">
+    <!-- Campos del formulario -->
+</form>
+```
+
+**Opciones avanzadas:**
+```html
+<form id="mi_formulario" 
+      data-cache="true" 
+      data-cache-interval="2000"
+      data-cache-notification="true"
+      data-cache-clear-on-submit="true"
+      data-cache-exclude="contrasena,tarjeta_credito">
+</form>
+```
+
+**Atributos disponibles:**
+- `data-cache="true"`: Activa el cache automático
+- `data-cache-interval`: Intervalo en ms entre guardados (default: 1000)
+- `data-cache-notification="false"`: Oculta notificaciones
+- `data-cache-clear-on-submit="false"`: No limpia cache al enviar
+- `data-cache-exclude`: Campos a excluir separados por comas
+- `data-cache-debug="true"`: Activa logs de depuración
+
+**Uso programático:**
+```javascript
+// Inicializar manualmente
+const cache = new FormCache('mi_formulario', {
+    saveInterval: 2000,
+    showNotification: true,
+    excludeFields: ['password', 'cvv']
+});
+
+// Limpiar cache manualmente
+cache.clearCache();
+
+// Verificar si hay cache
+if (cache.hasCache()) {
+    console.log('Hay datos guardados');
+}
+```
+
+**Características:**
+- ✓ Guardado automático mientras el usuario escribe
+- ✓ Restauración automática al recargar la página
+- ✓ Notificación visual de guardado exitoso
+- ✓ Limpieza automática al enviar correctamente
+- ✓ Exclusión de campos sensibles (passwords automáticamente)
+- ✓ Almacenamiento local en el navegador (no requiere servidor)
+- ✓ Funciona con todos los tipos de campos (text, select, checkbox, radio, textarea)
+
+**Formularios ya configurados:**
+- Historia Gerontológica
+- Registro de Paciente
+- Evolución Diaria de Enfermería
+- Consulta Médica
+- Formulario de Usuario
+
+**14. Cierre**
 Manual completado. Usa los scripts para generar las capturas y luego incrusta las imágenes. Para apoyo adicional (Selenium, mejora de accesibilidad, internacionalización), indícalo.
 
 ---
-Última actualización automática generada con soporte de Playwright.
+Última actualización automática generada con soporte de Playwright y cache de formularios.
 \n+**14. Generar PDF del manual con las imágenes**
 Requisitos: instalar librerías para PDF.
 ```powershell

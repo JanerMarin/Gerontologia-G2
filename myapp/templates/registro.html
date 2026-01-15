@@ -20,7 +20,7 @@
                 </div>
             </nav>
 
-            <form id="registroForm" action="{% url 'registro' %}" method="POST" style="max-width: 330px; margin: auto; padding-top: 80px;" onsubmit="return validarContrasenas()">
+            <form id="registroForm" action="{% url 'registro' %}" method="POST" style="max-width: 330px; margin: auto; padding-top: 80px;" onsubmit="return validarContrasenas()" data-cache="true" data-cache-exclude="contrasena,contrasena_confirmacion">
                 {% csrf_token %}
                 <img class="mb-4" src="{% static 'img/Logo.png' %}" alt="" width="72" height="57">
                 <h1 class="h3 mb-3 fw-normal">Registro usuario</h1>
@@ -117,6 +117,9 @@
             validarContrasenas();
         });
     </script>
+    
+    <!-- Script de cache automático para formularios -->
+    <script src="{% static 'js/form_cache.js' %}"></script>
 </body>
 -->
 </html>

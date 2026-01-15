@@ -29,7 +29,7 @@
             <h2>Evolución Diaria de Enfermería - Personas Mayores</h2>
         </header>
 
-        <form method="post" action="{% url 'evolucion_enfermeria' %}">
+        <form id="evolucion_enfermeria_form" method="post" action="{% url 'evolucion_enfermeria' %}" data-cache="true" data-cache-interval="1500">
             {% csrf_token %}
 
             <!-- Información del Paciente -->
@@ -420,5 +420,8 @@
             alert('Funcionalidad de detalle en desarrollo. ID: ' + id);
         }
     </script>
+    
+    <!-- Script de cache automático para formularios -->
+    <script src="{% static 'js/form_cache.js' %}"></script>
 </body>
 </html>
