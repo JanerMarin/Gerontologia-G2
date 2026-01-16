@@ -1027,7 +1027,7 @@ class EvolucionDiariaEnfermeria(models.Model):
     
     # Información del profesional que registra
     nombre_profesional = models.CharField(max_length=255, verbose_name='Nombre de quien atiende')
-    identificacion_profesional = models.CharField(max_length=50, verbose_name='Identificación')
+    identificacion_profesional = models.CharField(max_length=50, blank=True, verbose_name='Identificación')
     firma = models.CharField(max_length=255, blank=True, null=True)
     
     # Metadata

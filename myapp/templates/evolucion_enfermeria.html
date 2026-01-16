@@ -153,7 +153,7 @@
                                        value="{{ user.first_name }} {{ user.last_name }}" required>
                             </td>
                             <td>
-                                <input type="text" name="identificacion_profesional" class="form-input-small" required>
+                                <input type="text" name="identificacion_profesional" class="form-input-small">
                             </td>
                             <td>
                                 <input type="text" name="firma" class="form-input-small" placeholder="Firma">
@@ -227,29 +227,29 @@
                     <div class="signos-vitales-grid">
                         <div class="card-field">
                             <label>F.C. (Frecuencia Cardíaca)</label>
-                            <input type="text" name="frecuencia_cardiaca_mobile" class="form-input-small" placeholder="FC">
+                            <input type="text" name="frecuencia_cardiaca" class="form-input-small" placeholder="FC">
                         </div>
 
                         <div class="card-field">
                             <label>P.A. (Presión Arterial)</label>
-                            <input type="text" name="presion_arterial_mobile" class="form-input-small" placeholder="PA">
+                            <input type="text" name="presion_arterial" class="form-input-small" placeholder="PA">
                         </div>
 
                         <div class="card-field">
                             <label>T° (Temperatura)</label>
-                            <input type="text" name="temperatura_mobile" class="form-input-small" placeholder="T°">
+                            <input type="text" name="temperatura" class="form-input-small" placeholder="T°">
                         </div>
 
                         <div class="card-field">
                             <label>F.R. (Frecuencia Respiratoria)</label>
-                            <input type="text" name="frecuencia_respiratoria_mobile" class="form-input-small" placeholder="FR">
+                            <input type="text" name="frecuencia_respiratoria" class="form-input-small" placeholder="FR">
                         </div>
                     </div>
                 </div>
 
                 <div class="card-field">
                     <label><i class="fas fa-exclamation-triangle"></i> Novedad</label>
-                    <select name="novedad_mobile" class="form-select-small" required>
+                    <select name="novedad" class="form-select-small" required>
                         <option value="0">No</option>
                         <option value="1">Sí</option>
                     </select>
@@ -257,7 +257,7 @@
 
                 <div class="card-field">
                     <label><i class="fas fa-comment-medical"></i> Observaciones</label>
-                    <textarea name="observacion_mobile" class="form-textarea-small" rows="3" placeholder="Observaciones"></textarea>
+                    <textarea name="observacion" class="form-textarea-small" rows="3" placeholder="Observaciones"></textarea>
                 </div>
 
                 <div class="card-field-group">
@@ -265,18 +265,18 @@
                     
                     <div class="card-field">
                         <label>Nombre Completo</label>
-                        <input type="text" name="nombre_profesional_mobile" class="form-input-small" 
+                        <input type="text" name="nombre_profesional" class="form-input-small" 
                                value="{{ user.first_name }} {{ user.last_name }}" required>
                     </div>
 
                     <div class="card-field">
                         <label>Identificación</label>
-                        <input type="text" name="identificacion_profesional_mobile" class="form-input-small" required>
+                        <input type="text" name="identificacion_profesional" class="form-input-small" required>
                     </div>
 
                     <div class="card-field">
                         <label>Firma</label>
-                        <input type="text" name="firma_mobile" class="form-input-small" placeholder="Firma">
+                        <input type="text" name="firma" class="form-input-small" placeholder="Firma">
                     </div>
                 </div>
             </div>
