@@ -226,6 +226,10 @@ textarea {
     margin-bottom: 30px;
 }
 
+.evolution-card {
+    display: none;
+}
+
 .evolution-table {
     width: 100%;
     border-collapse: collapse;
@@ -515,7 +519,7 @@ textarea {
     font-size: 1.1rem;
     margin: 0;
 }
-}
+
 
 /* Estilos para vista de cards (móvil) */
 .evolution-card {
@@ -623,6 +627,7 @@ i {
 
 @media (max-width: 968px) {
     /* Ocultar tabla y mostrar cards */
+    
     .evolution-table-container {
         display: none;
     }
@@ -661,7 +666,7 @@ i {
     
     .btn-secondary,
     .btn-logout {
-        width: 100%;
+        width: auto;
         justify-content: center;
     }
 }
