@@ -1,65 +1,213 @@
-
 {% load static %}
 <!doctype html>
 <html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Panel Admin - Usuarios</title>
-	<link rel="stylesheet" href="{% static 'CSS/historia_gerontologica.css' %}">
-	<link rel="stylesheet" href="{% static 'CSS/lista_usuarios.css' %}">
+	<title>Gestión de Usuarios - Gerontología App</title>
+	<link rel="stylesheet" href="{% static 'CSS/enfermeria.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-	<div class="container lista-usuarios">
-		<h1 class="main-title">Panel de Administración — Usuarios</h1>
-		<div class="section-title">Listado de usuarios</div>
-
-		<div style="margin: 18px 0; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-			<a href="{% url 'admin_user_create' %}" class="submit-button" style="width:auto; padding:10px 18px;">Crear Usuario</a>
-			<a href="{% url 'home' %}" class="submit-button" style="width:auto; padding:10px 18px; background:linear-gradient(135deg,#6b7280 0%,#9ca3af 100%);">Volver</a>
+	<div class="container">
+		<!-- Header -->
+		<div class="header-section">
+			<div class="user-info-bar">
+				<div class="user-welcome">
+					<i class="fas fa-user-shield"></i>
+					<span><strong>{{ user.first_name }} {{ user.last_name }}</strong></span>
+				</div>
+				<div class="header-actions">
+					<a href="{% url 'administrador' %}" class="btn-secondary">
+						<i class="fas fa-arrow-left"></i> Volver al Módulo
+					</a>
+					<a href="{% url 'logout' %}" class="btn-logout">
+						<i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+					</a>
+				</div>
+			</div>
 		</div>
 
-		<table>
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Usuario</th>
-					<th>Correo</th>
-					<th>Nombre</th>
-					<th>Personal</th>
-					<th>Superusuario</th>
-					<th>Acciones</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for u in users %}
-				<tr>
-					<td>{{ u.id }}</td>
-					<td>{{ u.username }}</td>
-					<td>{{ u.email }}</td>
-					<td>{{ u.first_name }} {{ u.last_name }}</td>
-					<td style="text-align:center">{% if u.is_staff %}Sí{% else %}No{% endif %}</td>
-					<td style="text-align:center">{% if u.is_superuser %}Sí{% else %}No{% endif %}</td>
-					<td class="actions-cell" style="text-align:center;">
-						<div class="action-buttons">
-							<a href="{% url 'admin_user_edit' u.id %}" class="submit-button submit-button--small submit-button--update" title="Actualizar">
-								<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-								<span class="visually-hidden">Actualizar</span>
-							</a>
-							<a href="{% url 'admin_user_edit' u.id %}" class="submit-button submit-button--small submit-button--edit" title="Editar">
-								<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#fff"/></svg>
-								<span class="visually-hidden">Editar</span>
-							</a>
-							<a href="{% url 'admin_user_delete' u.id %}" class="submit-button submit-button--small submit-button--delete" title="Borrar">
-								<svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M10 11v6M14 11v6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-								<span class="visually-hidden">Borrar</span>
-							</a>
-						</div>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+		<h1 class="main-title">GESTIÓN DE USUARIOS</h1>
+
+		<!-- Mensajes -->
+		{% if messages %}
+		<div class="messages-container">
+			{% for message in messages %}
+			<div class="alert alert-{{ message.tags }}" style="margin: 20px 0; padding: 15px; border-radius: 8px;">
+				<i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+				{{ message }}
+				<button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+
+		<!-- Botón Crear Usuario -->
+		<div style="margin: 20px 0; text-align: right;">
+			<a href="{% url 'admin_user_create' %}" class="submit-btn">
+				<i class="fas fa-user-plus"></i> Crear Nuevo Usuario
+			</a>
+		</div>
+
+		<!-- Tabla de Usuarios -->
+		<section class="patients-section">
+			<div class="search-bar" style="margin-bottom: 20px;">
+				<input type="text" id="buscar-usuario" placeholder="🔍 Buscar usuario por nombre, email o username..." 
+					   style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px;"
+					   onkeyup="filtrarUsuarios()">
+			</div>
+			<div class="table-responsive">
+				<table class="patients-table" id="tabla-usuarios">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Usuario</th>
+							<th>Nombre Completo</th>
+							<th>Email</th>
+							<th>Grupo</th>
+							<th>Activo</th>
+							<th>Staff</th>
+							<th>Admin</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for u in users %}
+						<tr>
+							<td>{{ u.id }}</td>
+							<td><strong>{{ u.username }}</strong></td>
+							<td>{{ u.first_name }} {{ u.last_name }}</td>
+							<td>{{ u.email|default:"Sin email" }}</td>
+							<td>
+								{% if u.groups.all %}
+									<span style="background: #667eea; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+										{{ u.groups.first.name }}
+									</span>
+								{% else %}
+									<span style="color: #a0aec0;">Sin grupo</span>
+								{% endif %}
+							</td>
+							<td style="text-align:center;">
+								{% if u.is_active %}
+									<span style="color: #38a169;"><i class="fas fa-check-circle"></i></span>
+								{% else %}
+									<span style="color: #e53e3e;"><i class="fas fa-times-circle"></i></span>
+								{% endif %}
+							</td>
+							<td style="text-align:center;">
+								{% if u.is_staff %}
+									<span style="color: #38a169;"><i class="fas fa-check-circle"></i></span>
+								{% else %}
+									<span style="color: #a0aec0;"><i class="fas fa-minus-circle"></i></span>
+								{% endif %}
+							</td>
+							<td style="text-align:center;">
+								{% if u.is_superuser %}
+									<span style="color: #e53e3e;"><i class="fas fa-crown"></i></span>
+								{% else %}
+									<span style="color: #a0aec0;"><i class="fas fa-minus-circle"></i></span>
+								{% endif %}
+							</td>
+							<td>
+								<div class="action-buttons">
+									<a href="{% url 'admin_user_edit' u.id %}" class="btn-action btn-edit" title="Editar Usuario">
+										<i class="fas fa-edit"></i>
+									</a>
+									<a href="{% url 'admin_user_delete' u.id %}" class="btn-action btn-delete" title="Eliminar Usuario">
+										<i class="fas fa-trash"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="footer-section">
+			<p>&copy; 2025 Gerontología App - Gestión de Usuarios</p>
+		</footer>
 	</div>
+
+	<script>
+		function filtrarUsuarios() {
+			const filtro = document.getElementById('buscar-usuario').value.toLowerCase();
+			const tabla = document.getElementById('tabla-usuarios');
+			const filas = tabla.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+			
+			for (let fila of filas) {
+				const username = fila.cells[1].textContent.toLowerCase();
+				const nombre = fila.cells[2].textContent.toLowerCase();
+				const email = fila.cells[3].textContent.toLowerCase();
+				
+				if (username.includes(filtro) || nombre.includes(filtro) || email.includes(filtro)) {
+					fila.style.display = '';
+				} else {
+					fila.style.display = 'none';
+				}
+			}
+		}
+	</script>
+
+	<style>
+		.submit-btn {
+			padding: 12px 24px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			transition: all 0.3s;
+		}
+
+		.submit-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+		}
+
+		.btn-action {
+			padding: 8px 12px;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: all 0.3s;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			text-decoration: none;
+			color: white;
+			font-size: 14px;
+		}
+
+		.btn-action.btn-edit {
+			background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+		}
+
+		.btn-action.btn-edit:hover {
+			transform: scale(1.1);
+		}
+
+		.btn-action.btn-delete {
+			background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+		}
+
+		.btn-action.btn-delete:hover {
+			transform: scale(1.1);
+		}
+
+		.action-buttons {
+			display: flex;
+			gap: 8px;
+			justify-content: center;
+		}
+	</style>
 </body>
 </html>

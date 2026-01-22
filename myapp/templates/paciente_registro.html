@@ -100,6 +100,21 @@
             </div>
         
             <div class="form-actions">
+                {% if user.is_authenticated %}
+                    {% if user.groups.all.0.name == 'Medico' %}
+                    <a href="{% url 'medico' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i> Volver al Módulo Médico
+                    </a>
+                    {% elif user.groups.all.0.name == 'Enfermeria' %}
+                    <a href="{% url 'enfermeria' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i> Volver a Enfermería
+                    </a>
+                    {% else %}
+                    <a href="{% url 'home' %}" class="secondary-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                    {% endif %}
+                {% endif %}
                 <button type="reset" class="secondary-btn"><i class="fas fa-undo"></i> Restablecer</button>
                 <button type="submit" class="primary-btn"><i class="fas fa-save"></i> Guardar registro</button>
             </div>

@@ -21,8 +21,13 @@ from myapp import views
 #Aca se encuntran los enlaces que se importaron a partir de la clase myapp para que se pueda acceder a las rutas descritas en esa plantilla
 urlpatterns = [
     path('', views.home, name='home'),
-    path('admin/', admin.site.urls),
     path('administrador/', views.administrador, name='administrador'),
+    # Rutas de administración de usuarios (ANTES del admin de Django)
+    path('administrador/usuarios/', views.admin_users, name='admin_users'),
+    path('administrador/usuarios/crear/', views.admin_user_create, name='admin_user_create'),
+    path('administrador/usuarios/<int:user_id>/editar/', views.admin_user_edit, name='admin_user_edit'),
+    path('administrador/usuarios/<int:user_id>/eliminar/', views.admin_user_delete, name='admin_user_delete'),
+    path('admin/', admin.site.urls),
     path('atencion/', views.atencion, name='atencion'),
     path('contactenos/', views.contactenos, name='contactenos'),
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -38,12 +43,13 @@ urlpatterns = [
     path('manual.pdf', views.descargar_manual_pdf, name='manual_pdf'),
     path('enfermeria/', views.enfermeria, name='enfermeria'),
     path('enfermeria/evolucion/', views.evolucion_enfermeria, name='evolucion_enfermeria'),
+    path('enfermeria/historial/', views.historial_evoluciones, name='historial_evoluciones'),
     # path('perfil_paciente/', views.perfil_paciente, name='perfil_paciente'),
     path('paciente/', views.perfil_paciente, name='perfil_paciente_demo'),
     path("paciente/<int:paciente_id>/", views.perfil_paciente, name="perfil_paciente"),
     path('medico/', views.medico, name='medico'),
     path('medico/consulta-nueva/', views.medico_consulta_nueva, name='medico_consulta_nueva'),  
-     path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),  
+    path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),
 ]
 
    

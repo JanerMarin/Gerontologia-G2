@@ -26,9 +26,58 @@ def home(request):
     return render(request, "index.html")
 
 @login_required(login_url='login')
-@user_passes_test(lambda u: u.is_superuser, login_url='login')
+@user_passes_test(lambda u: u.is_superuser or u.is_staff, login_url='login')
 def administrador(request):
-    return render(request, "administrador.html")
+    """
+    Vista del MÓDULO DE ADMINISTRADOR - Dashboard principal
+    
+    Aquí el administrador puede:
+    - Ver estadísticas del sistema
+    - Ver lista de usuarios
+    - Gestionar usuarios (crear, editar, eliminar)
+    - Ver estadísticas de pacientes y actividad
+    """
+    from datetime import date
+    User = get_user_model()
+    
+    # Estadísticas generales
+    total_usuarios = User.objects.count()
+    usuarios_activos = User.objects.filter(is_active=True).count()
+    usuarios_staff = User.objects.filter(is_staff=True).count()
+    
+    # Estadísticas de pacientes
+    total_pacientes = Identificacion.objects.count()
+    
+    # Estadísticas de grupos
+    from django.contrib.auth.models import Group
+    grupos = Group.objects.all()
+    estadisticas_grupos = []
+    for grupo in grupos:
+        count = grupo.user_set.count()
+        estadisticas_grupos.append({'nombre': grupo.name, 'count': count})
+    
+    # Últimos usuarios registrados
+    ultimos_usuarios = User.objects.all().order_by('-date_joined')[:5]
+    
+    # Actividad reciente - consultas médicas
+    consultas_recientes = ConsultaMedica.objects.all().order_by('-fecha_registro')[:5]
+    
+    # Actividad reciente - evoluciones de enfermería
+    evoluciones_recientes = EvolucionDiariaEnfermeria.objects.all().order_by('-fecha_registro')[:5]
+    
+    context = {
+        'total_usuarios': total_usuarios,
+        'usuarios_activos': usuarios_activos,
+        'usuarios_staff': usuarios_staff,
+        'total_pacientes': total_pacientes,
+        'estadisticas_grupos': estadisticas_grupos,
+        'ultimos_usuarios': ultimos_usuarios,
+        'consultas_recientes': consultas_recientes,
+        'evoluciones_recientes': evoluciones_recientes,
+        'fecha_hoy': date.today(),
+    }
+    
+    return render(request, "administrador.html", context)
 
 def atencion(request):
     return render(request, "atencion.html")
@@ -697,6 +746,29 @@ def enfermeria(request):
 
 
 @login_required
+def historial_evoluciones(request):
+    """Vista para mostrar el historial completo de evoluciones sin formulario"""
+    from datetime import date
+    from .models import EvolucionDiariaEnfermeria
+    
+    # Verificar si el usuario pertenece al grupo Enfermeria
+    if not request.user.groups.filter(name='Enfermeria').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
+    
+    # Obtener todas las evoluciones ordenadas por fecha descendente
+    evoluciones = EvolucionDiariaEnfermeria.objects.select_related('paciente').order_by('-fecha', '-fecha_registro')
+    
+    context = {
+        'evoluciones': evoluciones,
+        'fecha_hoy': date.today(),
+        'total': evoluciones.count(),
+    }
+    
+    return render(request, 'historial_evoluciones.html', context)
+
+
+@login_required
 def evolucion_enfermeria(request):
     """Vista para el registro de evolución diaria de enfermería"""
     from datetime import date
@@ -711,6 +783,18 @@ def evolucion_enfermeria(request):
         try:
             # Obtener datos del formulario
             paciente_id = request.POST.get('paciente_id')
+            
+            if not paciente_id:
+                messages.error(request, 'Debe seleccionar un paciente.')
+                pacientes = Identificacion.objects.all().order_by('primer_nombre')
+                evoluciones = EvolucionDiariaEnfermeria.objects.select_related('paciente').order_by('-fecha', '-fecha_registro')[:20]
+                context = {
+                    'pacientes': pacientes,
+                    'evoluciones': evoluciones,
+                    'today': date.today().isoformat(),
+                }
+                return render(request, 'evolucion_enfermeria.html', context)
+            
             paciente = Identificacion.objects.get(id=paciente_id)
             
             # Crear registro de evolución
@@ -734,9 +818,12 @@ def evolucion_enfermeria(request):
                 usuario_registro=request.user
             )
             
-            messages.success(request, 'Registro de evolución guardado exitosamente.')
+            messages.success(request, f'✓ Registro de evolución guardado exitosamente para {paciente.primer_nombre} {paciente.primer_apellido}.')
+            # Redirigir con parámetro para limpiar el formulario
             return redirect('evolucion_enfermeria')
             
+        except Identificacion.DoesNotExist:
+            messages.error(request, 'El paciente seleccionado no existe.')
         except Exception as e:
             messages.error(request, f'Error al guardar el registro: {str(e)}')
     
@@ -771,58 +858,30 @@ def descargar_manual_pdf(request):
 
 
 def perfil_paciente(request, paciente_id=None):
-    if paciente_id:
-        # Si el ID existe, cargar paciente real
-        patient = get_object_or_404(Patient, id=paciente_id)
-    else:
-        # 🔹 Paciente temporal para pruebas
-        patient = {
-            "first_name": "Paciente",
-            "last_name": "Demostración",
-            "document_number": "00000000",
-            "birth_date": "1950-01-01",
-            "age": 75,
-            "phone": "0000000000",
-            "address": "Dirección de ejemplo",
-            "guardian_name": "Familiar de Ejemplo",
-            "guardian_phone": "9999999999",
-            "primary_diagnosis": "N/A",
-            "doctor": "N/A",
-        }
-        # Otros datos vacíos
-        allergies = []
-        chronic_conditions = []
-        medications = []
-        vital_signs = []
-        therapy_sessions = []
-        documents = []
-
-        return render(request, "perfil_paciente.html", {
-            "patient": patient,
-            "allergies": allergies,
-            "chronic_conditions": chronic_conditions,
-            "medications": medications,
-            "vital_signs": vital_signs,
-            "therapy_sessions": therapy_sessions,
-            "documents": documents,
-        })
-
-    # 🔹 Si llegó aquí, significa que sí había ID real
-    allergies = patient.allergies.all()
-    chronic_conditions = patient.chronic_conditions.all()
-    medications = patient.medications.all()
-    vital_signs = patient.vital_signs.order_by("-date")[:10]
-    therapy_sessions = patient.therapy_sessions.order_by("-date")
-    documents = patient.documents.all()
+    if not paciente_id:
+        messages.error(request, 'No se especificó el ID del paciente.')
+        return redirect('medico')
+    
+    # Obtener el paciente del modelo Identificacion
+    paciente = get_object_or_404(Identificacion, id=paciente_id)
+    
+    # Obtener datos relacionados
+    try:
+        familia_acudiente = FamiliaAcudientes.objects.filter(paciente=paciente).first()
+    except:
+        familia_acudiente = None
+    
+    # Obtener consultas médicas del paciente
+    consultas_medicas = ConsultaMedica.objects.filter(paciente=paciente).order_by('-fecha')
+    
+    # Obtener evoluciones de enfermería del paciente
+    evoluciones_enfermeria = EvolucionDiariaEnfermeria.objects.filter(paciente=paciente).order_by('-fecha')
 
     return render(request, "perfil_paciente.html", {
-        "patient": patient,
-        "allergies": allergies,
-        "chronic_conditions": chronic_conditions,
-        "medications": medications,
-        "vital_signs": vital_signs,
-        "therapy_sessions": therapy_sessions,
-        "documents": documents,
+        "paciente": paciente,
+        "familia_acudiente": familia_acudiente,
+        "consultas_medicas": consultas_medicas,
+        "evoluciones_enfermeria": evoluciones_enfermeria,
     })
 
 
@@ -1022,50 +1081,60 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def medico(request):
     """
-    Vista del MÓDULO DEL MÉDICO.
-
+    Vista del MÓDULO DEL MÉDICO - Dashboard principal
+    
     Aquí el médico puede:
-    - Ver la lista de pacientes (Identificacion).
-    - Registrar una CONSULTA MÉDICA para un paciente.
-    - Registrar un ENUNCIADO (nota general u observación propia).
+    - Ver estadísticas generales
+    - Ver lista de pacientes
+    - Acceder a registrar consultas médicas
+    - Ver historial de consultas recientes
     """
+    from datetime import date
+    from django.db.models import Count, Q
+    
+    # Verificar si el usuario pertenece al grupo Medico
+    if not request.user.groups.filter(name='Medico').exists():
+        messages.error(request, 'No tiene permisos para acceder a este módulo.')
+        return redirect('home')
 
-    # 1️ Traer la lista de pacientes para mostrar en un <select>
-    pacientes = Identificacion.objects.all().order_by('primer_nombre')
-
-    # 2️ Si el formulario fue enviado (método POST)
-    if request.method == 'POST':
-        # Este campo oculto nos dirá QUÉ formulario se envió:
-        # "consulta"  -> formulario de consulta médica
-        # "enunciado" -> formulario de enunciado del médico
-        tipo_form = request.POST.get('tipo_form')
-
-        # =======================
-        #  FORMULARIO CONSULTA
-        # =======================
-        if tipo_form == 'consulta':
-            return redirect('medico_consulta_nueva')  # Redirige a la vista para registrar la consulta
-
-        # =======================
-        #  FORMULARIO ENUNCIADO
-        # =======================
-        elif tipo_form == 'enunciado':
-            return redirect('medico_enunciado_nuevo')  # Redirige a la vista para registrar el enunciado
-
-    # 3️ Consultas recientes del médico logueado
-    consultas = ConsultaMedica.objects.filter(medico=request.user).select_related('paciente').order_by('-fecha')[:10]
-
-    # 4️ Enunciados recientes del médico logueado
-    enunciados = EnunciadoMedico.objects.filter(medico=request.user).order_by('-fecha_registro')[:5]
-
-    # 5️ Contexto para la plantilla
+    # Obtener fecha de hoy
+    hoy = date.today()
+    
+    # Estadísticas generales
+    total_pacientes = Identificacion.objects.count()
+    
+    # Consultas del médico actual
+    consultas_hoy = ConsultaMedica.objects.filter(
+        medico=request.user,
+        fecha=hoy
+    ).count()
+    
+    # Total de consultas del médico
+    total_consultas_medico = ConsultaMedica.objects.filter(medico=request.user).count()
+    
+    # Últimas consultas del médico
+    ultimas_consultas = ConsultaMedica.objects.filter(
+        medico=request.user
+    ).select_related('paciente').order_by('-fecha', '-fecha_registro')[:5]
+    
+    # Lista de pacientes para consultar
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')[:10]
+    
+    # Enunciados recientes
+    enunciados_recientes = EnunciadoMedico.objects.filter(
+        medico=request.user
+    ).order_by('-fecha_registro')[:5]
+    
     context = {
         'pacientes': pacientes,
-        'consultas': consultas,
-        'enunciados': enunciados,
+        'total_pacientes': total_pacientes,
+        'consultas_hoy': consultas_hoy,
+        'total_consultas': total_consultas_medico,
+        'ultimas_consultas': ultimas_consultas,
+        'enunciados_recientes': enunciados_recientes,
+        'fecha_hoy': hoy,
     }
-
-    # 6️ Renderizar la vista medico.html
+    
     return render(request, 'medico.html', context)
 
 
@@ -1073,10 +1142,16 @@ def medico(request):
 # VISTA PARA REGISTRAR CONSULTA MÉDICA
 # =======================
 @login_required
+@login_required
 def medico_consulta_nueva(request):        
     """
     Vista para registrar una nueva consulta médica para un paciente.
     """
+    # Verificar que el usuario esté en el grupo Medico
+    if not request.user.groups.filter(name='Medico').exists():
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('home')
+    
     if request.method == 'POST':
         try:
             paciente_id = request.POST.get('paciente_id')
@@ -1093,11 +1168,23 @@ def medico_consulta_nueva(request):
                 medico=request.user  # El usuario logueado
             )
             messages.success(request, 'Consulta médica registrada correctamente.')
+            return redirect('medico')
         except Exception as e:
             messages.error(request, f'Error al guardar la consulta: {str(e)}')
-
-    # Redirigir al módulo médico después de guardar la consulta
-    return redirect('medico')  # Asegúrate de que el nombre de la URL sea correcto
+    
+    # GET - Mostrar el formulario
+    pacientes = Identificacion.objects.all().order_by('primer_nombre')
+    
+    # Si viene un paciente_id por parámetro GET, pre-seleccionarlo
+    paciente_seleccionado_id = request.GET.get('paciente')
+    
+    from datetime import date
+    
+    return render(request, 'medico_consulta_nueva.html', {
+        'pacientes': pacientes,
+        'paciente_seleccionado_id': paciente_seleccionado_id,
+        'fecha_hoy': date.today()
+    })
 
 
 # =======================
@@ -1108,6 +1195,11 @@ def medico_enunciado_nuevo(request):
     """
     Vista para registrar un nuevo enunciado o nota del médico.
     """
+    # Verificar que el usuario esté en el grupo Medico
+    if not request.user.groups.filter(name='Medico').exists():
+        messages.error(request, 'No tienes permisos para acceder a esta sección.')
+        return redirect('home')
+    
     if request.method == 'POST':
         try:
             texto = request.POST.get('texto')
@@ -1117,10 +1209,14 @@ def medico_enunciado_nuevo(request):
                     texto=texto.strip()
                 )
                 messages.success(request, 'Enunciado guardado correctamente.')
+                return redirect('medico')
             else:
                 messages.error(request, 'El enunciado no puede estar vacío.')
         except Exception as e:
             messages.error(request, f'Error al guardar el enunciado: {str(e)}')
 
-    # Redirigir al módulo médico después de guardar el enunciado
-    return redirect('medico')  # Redirige al módulo del médico después de guardar el enunciado
+    # GET - Mostrar el formulario
+    from datetime import date
+    return render(request, 'medico_enunciado_nuevo.html', {
+        'fecha_hoy': date.today()
+    })

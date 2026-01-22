@@ -29,6 +29,19 @@
             <h2>Evolución Diaria de Enfermería - Personas Mayores</h2>
         </header>
 
+        <!-- Mensajes de éxito/error -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin: 20px 0; padding: 15px; border-radius: 8px; {% if message.tags == 'success' %}background-color: #d1fae5; color: #065f46; border: 1px solid #10b981;{% elif message.tags == 'error' %}background-color: #fee2e2; color: #991b1b; border: 1px solid #dc2626;{% else %}background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;{% endif %}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer; color: inherit;">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <form id="evolucion_enfermeria_form" method="post" action="{% url 'evolucion_enfermeria' %}" data-cache="true" data-cache-interval="1500">
             {% csrf_token %}
 
@@ -392,6 +405,32 @@
     </div>
 
     <script>
+        // Función para obtener el token CSRF de las cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Asegurar que el token CSRF esté presente antes de enviar
+        document.getElementById('evolucion_enfermeria_form').addEventListener('submit', function(e) {
+            const csrfInput = this.querySelector('input[name="csrfmiddlewaretoken"]');
+            if (!csrfInput || !csrfInput.value) {
+                e.preventDefault();
+                alert('Error de seguridad: Token CSRF faltante. Por favor recarga la página.');
+                return false;
+            }
+        });
+
         // Actualizar edad cuando se selecciona un paciente
         document.getElementById('paciente_select').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -419,6 +458,59 @@
         function verDetalle(id) {
             alert('Funcionalidad de detalle en desarrollo. ID: ' + id);
         }
+
+        // Detectar si se guardó exitosamente y limpiar formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            // Buscar mensaje de éxito
+            const alerts = document.querySelectorAll('.alert-success, .alert.alert-success');
+            
+            if (alerts.length > 0) {
+                // Si hay mensaje de éxito, limpiar el formulario
+                const form = document.getElementById('evolucion_enfermeria_form');
+                if (form) {
+                    // Limpiar todos los campos excepto nombre profesional y fecha
+                    const campos = form.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                    campos.forEach(campo => {
+                        if (campo.name !== 'nombre_profesional' && campo.name !== 'fecha') {
+                            campo.value = '';
+                        }
+                    });
+                    
+                    // Resetear selects a su valor por defecto
+                    const selects = form.querySelectorAll('select');
+                    selects.forEach(select => {
+                        if (select.name === 'paciente_id') {
+                            select.selectedIndex = 0;
+                            document.getElementById('edad_display').value = '';
+                        } else if (select.name !== 'paso_el_dia' && select.name !== 'alimentacion' 
+                                   && select.name !== 'elimina' && select.name !== 'exonera') {
+                            // Mantener valores por defecto de los selects de evaluación
+                            select.selectedIndex = 0;
+                        }
+                    });
+                    
+                    // Limpiar cache del formulario
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.removeItem('form_cache_evolucion_enfermeria_form');
+                    }
+                    
+                    console.log('Formulario limpiado después de guardado exitoso');
+                }
+            }
+        });
+
+        // Prevenir restauración de cache después de un guardado exitoso
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const alerts = document.querySelectorAll('.alert-success');
+            
+            if (alerts.length > 0) {
+                // Limpiar cache si hay éxito
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem('form_cache_evolucion_enfermeria_form');
+                }
+            }
+        });
     </script>
     
     <!-- Script de cache automático para formularios -->
