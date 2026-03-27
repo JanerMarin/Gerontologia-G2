@@ -250,7 +250,7 @@ git stash pop
 
 ## 👥 Colaboradores
 
-- Manuel Maldonado
+- janer marin
 
 ## 📝 Convenciones de Commits
 
