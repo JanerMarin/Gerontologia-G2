@@ -252,6 +252,7 @@ git stash pop
 
 - Manuel Maldonado
 - Danilo Lozano
+- Juan Camilo Rios Mesa
 
 ## 📝 Convenciones de Commits
 
