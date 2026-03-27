@@ -251,6 +251,7 @@ git stash pop
 ## 👥 Colaboradores
 
 - Manuel Maldonado
+- Danilo Lozano
 
 ## 📝 Convenciones de Commits
 
