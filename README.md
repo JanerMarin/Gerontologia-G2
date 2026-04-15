@@ -250,6 +250,10 @@ git stash pop
 
 ## 👥 Colaboradores
 
+- Manuel Maldonado
+- Danilo Lozano
+- Juan Camilo Rios Mesa
+- Manuela Rois Rengifo
 - janer marin
 
 ## 📝 Convenciones de Commits
