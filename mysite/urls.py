@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from myapp.views import ver_historia
+
+
 
 #Aca se encuntran los enlaces que se importaron a partir de la clase myapp para que se pueda acceder a las rutas descritas en esa plantilla
 urlpatterns = [
@@ -50,16 +53,15 @@ urlpatterns = [
     path('medico/', views.medico, name='medico'),
     path('medico/consulta-nueva/', views.medico_consulta_nueva, name='medico_consulta_nueva'),  
     path('medico/enunciado-nuevo/', views.medico_enunciado_nuevo, name='medico_enunciado_nuevo'),
+    #hiatorial geriatico y pdf
+    path('enfermeria/historia/', views.buscar, name='buscar_historial'),
+
+
+    path('historia/<int:id>/', ver_historia, name='ver_historia'),
+
+
+
 ]
 
-   
-
-
-
-    
-    
-    
-    
-  
     
     
