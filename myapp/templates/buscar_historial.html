@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+{% load static %}
+
+<title>buscar Historial Geriátrico</title>
+
+<link rel="stylesheet" href="{% static 'css/historial.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+    <h1>buscar historial geriátrico</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input name="cc" placeholder="Ingrese cédula del paciente">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <hr>
+
+    {% for h in historias %}
+    <div class="patient-card">
+        <h3>{{ h.fk_identificacion.nombre }} (CC: {{ h.fk_identificacion.cc }})</h3><p>Edad: {{ h.fk_identificacion.edad }}</p>
+        <div class="actions">
+            <a href="/historia/{{ h.id }}" class="ver">Ver historia</a>
+            <a href="/pdf/{{ h.id }}" class="pdf">PDF</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

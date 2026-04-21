@@ -12,12 +12,53 @@ from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from .models import Identificacion, ConsultaMedica
+from .models import Historia
+
+
+from django.shortcuts import render, get_object_or_404
+from weasyprint import HTML
+import tempfile
+import os
+from django.template.loader import render_to_string
 
 
 
+
+
+#======================================================
+# historial geriatico y pdf.
+#======================================================
+
+from django.shortcuts import render, get_object_or_404
+from .models import HistoriaGerontologica
+
+def ver_historia(request, id):
+    historia = get_object_or_404(HistoriaGerontologica, id=id)
+
+    return render(request, "ver_historia.html", {
+        "h": historia
+    })
+
+
+from django.shortcuts import render
+from .models import HistoriaGerontologica
+
+def buscar(request):
+    historias = []
+
+    if request.method == "POST":
+        cc = request.POST.get("cc")
+
+        historias = HistoriaGerontologica.objects.filter(
+             fk_identificacion__numero_documento_paciente=cc
+             )
+
+    return render(request, "buscar_historial.html", {
+        "historias": historias
+    })
+#======================================================
 
 
 
@@ -1220,3 +1261,5 @@ def medico_enunciado_nuevo(request):
     return render(request, 'medico_enunciado_nuevo.html', {
         'fecha_hoy': date.today()
     })
+
+

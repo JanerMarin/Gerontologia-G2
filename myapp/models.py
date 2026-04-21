@@ -9,6 +9,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 
 
@@ -1116,3 +1118,7 @@ class EnunciadoMedico(models.Model):
         return f'Enunciado de {self.medico.first_name} - {self.fecha_registro.strftime("%Y-%m-%d")}'
 
     
+# ======================================================
+# modelos para modulo de historial geriatoco y pdf
+# ======================================================
+Historia = HistoriaGerontologica
